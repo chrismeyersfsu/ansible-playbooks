@@ -1,12 +1,3 @@
 - hosts: all
-  vars:
-    scan_use_checksum: false
-    scan_use_recursive: false
   tasks:
-    - scan_packages_2:
-    - scan_services:
-    - scan_files:
-        path: '{{ scan_file_path }}'
-        get_checksum: '{{ scan_use_checksum }}'
-        recursive: '{{ scan_use_recursive }}'
-      when: scan_file_path is defined
+    - scan_foo:
