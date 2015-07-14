@@ -1,0 +1,11 @@
+- hosts: local
+  vars:
+    - repo_url: 'http://releases.ansible.com/ansible-tower'
+    - dest: '/var/lib/awx/projects'
+  tasks:
+    - name: download nightly  ansible-tower-setup tarball
+      get_url: url="{{ repo_url }}/setup/ansible-tower-setup-latest.tar.gz" dest="{{ dest }}" mode=0640
+      register: tarball
+
+    - name: untar ansible-tower-setup
+      shell: tar -xvf {{tarball.dest}} chdir="{{ dest }}"
