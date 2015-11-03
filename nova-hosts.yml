@@ -1,6 +1,7 @@
 - hosts: all
   gather_facts: false
   vars:
+    config_file: "{{ lookup('env', 'OS_CLIENT_CONFIG_FILE') }}"
     nova_auth_url: ''
     nova_username: ''
     nova_password: ''
@@ -15,6 +16,14 @@
       instance_name: deceptacon
       instance_count: 3
   tasks:
+    - debug: msg="{{ config_file }}"
+    - stat: path="{{ config_file }}"
+      register: st
+    - include_vars: "{{ config_file }}"
+      when: st.stat.exists and st.stat.isreg
+
+    - debug: msg="{{ clouds|default('No clouds found') }}"
+
     - name: "Setting nova instance state to: {{ nova_instance_state }}"
       local_action: 
         module: nova_compute
