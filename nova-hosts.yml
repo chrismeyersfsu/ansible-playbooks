@@ -2,9 +2,6 @@
   gather_facts: false
   vars:
     config_file: "{{ lookup('env', 'OS_CLIENT_CONFIG_FILE') }}"
-    nova_auth_url: ''
-    nova_username: ''
-    nova_password: ''
     nova_tenant_name: demo
     nova_image_name: "cirros-0.3.2-x86_64-uec"
     nova_instance_name: autobot
@@ -22,18 +19,19 @@
     - include_vars: "{{ config_file }}"
       when: st.stat.exists and st.stat.isreg
 
-    - debug: msg="{{ clouds|default('No clouds found') }}"
+    - name: "Print out clouds variable"
+      debug: msg="{{ clouds|default('No clouds found') }}"
 
     - name: "Setting nova instance state to: {{ nova_instance_state }}"
       local_action: 
         module: nova_compute
-        login_username: "{{ nova_username }}"
-        login_password: "{{ nova_password }}"
-        login_tenant_name: "{{ nova_tenant_name }}"
+        login_username: "{{ clouds.devstack.auth.username }}"
+        login_password: "{{ clouds.devstack.auth.password }}"
+        login_tenant_name: "{{ clouds.devstack.auth.project_name }}"
         image_name: "{{ nova_image_name }}"
         name: "{{ nova_group.instance_name }}-{{ nova_group.group_name}}-{{ item }}"
         flavor_include: "{{ nova_flavor_name }}"
-        auth_url: "{{ nova_auth_url }}"
+        auth_url: "{{ clouds.devstack.auth.auth_url }}"
         state: "{{ nova_instance_state }}"
         meta:
           group: "{{ nova_group.group_name }}"
