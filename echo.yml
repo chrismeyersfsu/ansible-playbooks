@@ -1,0 +1,6 @@
+- hosts: all
+  gather_facts: false
+  vars:
+    hello: "I am a playbook var"
+  tasks:
+    - debug: msg="{{ hello }}"
