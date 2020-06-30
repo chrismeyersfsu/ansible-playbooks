@@ -1,0 +1,3 @@
+---
+- debug:
+    msg: "You are running the foobar role that lives inside of the bar collection, which is part of the foo namespace. foo.bar.foobar FTW"
